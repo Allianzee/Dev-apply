@@ -6,6 +6,7 @@ type Role = {
   id: string;
   name: string;
   description: string;
+  category: string;
   icon: string;
   urgent?: boolean;
 };
@@ -14,38 +15,50 @@ const roles: Role[] = [
   {
     id: "ui-designer",
     name: "UI Designer",
-    description: "Design polished, functional interfaces for PSTD.",
+    description:
+      "Design polished interfaces, menus, HUDs and systems that make PSTD feel like a finished game.",
+    category: "DESIGN",
     icon: "UI",
     urgent: true
   },
   {
     id: "modeler",
-    name: "Modeler",
-    description: "Create characters, enemies, props and map assets.",
+    name: "3D Modeler",
+    description:
+      "Create characters, enemies, props, environments and other 3D assets for PSTD.",
+    category: "3D ART",
     icon: "3D"
   },
   {
     id: "artist",
-    name: "Artist",
-    description: "Create thumbnails, promotional art and in-game visuals.",
-    icon: "ART"
+    name: "2D Artist",
+    description:
+      "Create thumbnails, promotional artwork, icons, concepts and other visual assets.",
+    category: "ART",
+    icon: "2D"
   },
   {
     id: "vfx",
     name: "VFX Artist",
-    description: "Make abilities, attacks, impacts and other effects pop.",
+    description:
+      "Create satisfying attacks, abilities, impacts, explosions and other visual effects.",
+    category: "EFFECTS",
     icon: "FX"
   },
   {
     id: "sfx",
     name: "SFX / Sound Designer",
-    description: "Create and implement sounds that fit the game.",
+    description:
+      "Create sound effects, UI sounds, ability sounds and other audio for PSTD.",
+    category: "AUDIO",
     icon: "SFX"
   },
   {
     id: "animator",
     name: "Animator",
-    description: "Create character, enemy and ability animations.",
+    description:
+      "Create smooth character, enemy, ability and cinematic animations.",
+    category: "ANIMATION",
     icon: "AN"
   }
 ];
@@ -66,30 +79,36 @@ export default function Applications() {
     setSelectedRole(id);
     setSubmitted(false);
     setError("");
+
     setTimeout(() => {
       document.getElementById("application-form")?.scrollIntoView({
         behavior: "smooth",
         block: "start"
       });
-    }, 50);
+    }, 100);
   }
 
-  async function submitApplication(event: FormEvent<HTMLFormElement>) {
+  async function submitApplication(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
+
     setError("");
 
     if (!selectedRole) {
-      setError("Please choose a role first.");
+      setError("Please choose a role before submitting.");
       return;
     }
 
     const form = event.currentTarget;
     const data = new FormData(form);
+
     data.set("role", selected?.name ?? selectedRole);
 
-    if (files.length) {
-      data.delete("portfolio");
-      for (const file of files) data.append("portfolio", file);
+    data.delete("portfolio");
+
+    for (const file of files) {
+      data.append("portfolio", file);
     }
 
     setLoading(true);
@@ -103,279 +122,711 @@ export default function Applications() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || "Something went wrong.");
+        throw new Error(
+          result.error || "Something went wrong."
+        );
       }
 
       setSubmitted(true);
-      form.reset();
       setFiles([]);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      form.reset();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong while submitting your application."
+      );
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen px-5 py-8 sm:px-8">
-      <div className="mx-auto max-w-6xl">
-        <header className="flex items-center justify-between py-3">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white font-black text-black">
-              P
+    <main className="min-h-screen overflow-hidden">
+
+      {/* BACKGROUND EFFECTS */}
+
+      <div className="site-background">
+        <div className="background-grid" />
+        <div className="glow glow-one" />
+        <div className="glow glow-two" />
+        <div className="glow glow-three" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
+
+        {/* NAVBAR */}
+
+        <header className="flex items-center justify-between border-b border-white/[0.06] py-6">
+
+          <div className="flex items-center gap-4">
+
+            <div className="studio-mark">
+              DS
             </div>
+
             <div>
-              <p className="font-bold tracking-tight">PSTD</p>
-              <p className="text-xs text-zinc-500">Development Team</p>
+              <div className="flex items-start">
+                <span className="studio-name">
+                  DELAYED STUDIOS
+                </span>
+
+                <sup className="ml-1 text-[9px] font-bold text-zinc-500">
+                  TM
+                </sup>
+              </div>
+
+              <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.22em] text-zinc-600">
+                Independent Game Studio
+              </p>
             </div>
+
           </div>
-          <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-zinc-400">
-            Applications open
-          </span>
+
+          <div className="hidden items-center gap-3 sm:flex">
+
+            <div className="status-dot" />
+
+            <span className="text-xs font-medium text-zinc-500">
+              Applications Open
+            </span>
+
+          </div>
+
         </header>
 
         {submitted ? (
-          <section className="mx-auto mt-20 max-w-2xl glass rounded-3xl p-8 text-center sm:p-12">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/15 text-2xl text-indigo-300">
-              ✓
-            </div>
-            <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
-              Application submitted.
-            </h1>
-            <p className="mt-4 leading-7 text-zinc-400">
-              Your application has been sent to the PSTD development team.
-              If we&apos;re interested, we&apos;ll contact you through Discord.
-            </p>
-            <button
-              onClick={() => setSubmitted(false)}
-              className="mt-8 rounded-xl bg-white px-5 py-3 font-semibold text-black transition hover:bg-zinc-200"
-            >
-              Submit another application
-            </button>
-          </section>
-        ) : (
-          <>
-            <section className="pb-16 pt-20 text-center sm:pt-28">
-              <div className="mx-auto mb-5 inline-flex rounded-full border border-indigo-400/20 bg-indigo-400/10 px-3 py-1.5 text-xs font-semibold text-indigo-300">
-                We&apos;re looking for developers
+
+          /* SUCCESS */
+
+          <section className="success-wrapper">
+
+            <div className="success-card">
+
+              <div className="success-icon">
+                <span>✓</span>
               </div>
-              <h1 className="mx-auto max-w-4xl text-5xl font-black tracking-[-0.04em] sm:text-7xl">
-                Join the <span className="text-indigo-300">PSTD</span> team.
+
+              <div className="success-label">
+                APPLICATION RECEIVED
+              </div>
+
+              <h1>
+                You&apos;re officially in the queue.
               </h1>
-              <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-zinc-400 sm:text-lg">
-                We&apos;re expanding the development team and looking for
-                talented people who want to help make PSTD better.
+
+              <p>
+                Your application has been sent to the
+                Delayed Studios™ development team.
+                If we think you&apos;re a good fit for PSTD,
+                we&apos;ll reach out to you through Discord.
               </p>
+
+              <button
+                onClick={() => setSubmitted(false)}
+                className="primary-button"
+              >
+                Submit another application
+                <span>→</span>
+              </button>
+
+            </div>
+
+          </section>
+
+        ) : (
+
+          <>
+
+            {/* HERO */}
+
+            <section className="hero">
+
+              <div className="hero-eyebrow">
+                <span className="eyebrow-line" />
+                DELAYED STUDIOS™
+                <span className="eyebrow-line" />
+              </div>
+
+              <div className="hero-title-small">
+                IS LOOKING FOR
+              </div>
+
+              <h1 className="hero-title">
+                <span className="hero-title-light">
+                  THE NEXT
+                </span>
+
+                <span className="hero-title-gradient">
+                  DEVELOPER.
+                </span>
+              </h1>
+
+              <p className="hero-description">
+                PSTD is growing, and we&apos;re looking for talented
+                people who want to help us build something
+                genuinely awesome.
+              </p>
+
+              <div className="hero-meta">
+
+                <div className="meta-item">
+                  <strong>06</strong>
+                  <span>OPEN ROLES</span>
+                </div>
+
+                <div className="meta-divider" />
+
+                <div className="meta-item">
+                  <strong>01</strong>
+                  <span>PROJECT</span>
+                </div>
+
+                <div className="meta-divider" />
+
+                <div className="meta-item">
+                  <strong>∞</strong>
+                  <span>ROOM TO GROW</span>
+                </div>
+
+              </div>
+
             </section>
 
-            <section>
-              <div className="mb-5 flex items-end justify-between gap-4">
-                <div>
-                  <h2 className="text-xl font-bold">Choose a role</h2>
-                  <p className="mt-1 text-sm text-zinc-500">
-                    Select what you want to apply for.
-                  </p>
+            {/* PROJECT BANNER */}
+
+            <section className="project-banner">
+
+              <div className="project-left">
+
+                <div className="pstd-logo">
+                  P
                 </div>
-                <span className="hidden text-xs text-zinc-600 sm:block">
-                  01 / 02
+
+                <div>
+                  <div className="project-overline">
+                    JOIN THE DEVELOPMENT TEAM
+                  </div>
+
+                  <h2>
+                    PROJECT <span>PSTD</span>
+                  </h2>
+                </div>
+
+              </div>
+
+              <div className="project-right">
+                <span>
+                  Made by Delayed Studios™
+                </span>
+
+                <span className="project-arrow">
+                  ↗
                 </span>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {roles.map((role) => (
+            </section>
+
+            {/* ROLES */}
+
+            <section className="roles-section">
+
+              <div className="section-heading">
+
+                <div>
+                  <div className="section-number">
+                    01 — POSITIONS
+                  </div>
+
+                  <h2>
+                    Pick your role.
+                  </h2>
+
+                  <p>
+                    Choose the position that matches what
+                    you&apos;re best at.
+                  </p>
+                </div>
+
+                <div className="desktop-step">
+                  <span>01</span>
+                  <div />
+                  <span className="muted">02</span>
+                </div>
+
+              </div>
+
+              <div className="roles-grid">
+
+                {roles.map((role, index) => (
+
                   <button
                     key={role.id}
                     type="button"
                     onClick={() => chooseRole(role.id)}
-                    className={`role-card relative rounded-2xl border p-5 text-left ${
+                    className={`new-role-card ${
                       selectedRole === role.id
-                        ? "selected"
-                        : "border-white/[0.08] bg-white/[0.025]"
+                        ? "new-role-selected"
+                        : ""
+                    } ${
+                      role.urgent
+                        ? "new-role-featured"
+                        : ""
                     }`}
                   >
+
                     {role.urgent && (
-                      <span className="absolute right-4 top-4 rounded-full bg-indigo-400/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-indigo-300">
-                        Most needed
-                      </span>
+                      <div className="needed-badge">
+                        <span />
+                        MOST NEEDED
+                      </div>
                     )}
-                    <span className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.07] text-[10px] font-black text-zinc-300">
+
+                    <div className="role-top">
+
+                      <span className="role-index">
+                        0{index + 1}
+                      </span>
+
+                      <span className="role-category">
+                        {role.category}
+                      </span>
+
+                    </div>
+
+                    <div className="new-role-icon">
                       {role.icon}
-                    </span>
-                    <h3 className="font-bold">{role.name}</h3>
-                    <p className="mt-2 text-sm leading-6 text-zinc-500">
+                    </div>
+
+                    <h3>
+                      {role.name}
+                    </h3>
+
+                    <p>
                       {role.description}
                     </p>
+
+                    <div className="role-bottom">
+
+                      <span>
+                        APPLY FOR ROLE
+                      </span>
+
+                      <span className="role-arrow">
+                        →
+                      </span>
+
+                    </div>
+
                   </button>
+
                 ))}
+
               </div>
+
             </section>
+
+            {/* APPLICATION */}
 
             <section
               id="application-form"
-              className="mt-20 scroll-mt-8 pb-16"
+              className="application-section"
             >
-              <div className="mb-5 flex items-end justify-between gap-4">
+
+              <div className="section-heading">
+
                 <div>
-                  <h2 className="text-xl font-bold">Your application</h2>
-                  <p className="mt-1 text-sm text-zinc-500">
-                    {selected
-                      ? `Applying for ${selected.name}`
-                      : "Choose a role above to get started."}
+
+                  <div className="section-number">
+                    02 — APPLICATION
+                  </div>
+
+                  <h2>
+                    Tell us about yourself.
+                  </h2>
+
+                  <p>
+                    Give us everything we need to know.
                   </p>
+
                 </div>
-                <span className="hidden text-xs text-zinc-600 sm:block">
-                  02 / 02
-                </span>
+
+                <div className="desktop-step">
+                  <span className="muted">
+                    01
+                  </span>
+
+                  <div />
+
+                  <span>
+                    02
+                  </span>
+                </div>
+
               </div>
 
               <form
                 onSubmit={submitApplication}
-                className="glass rounded-3xl p-5 sm:p-8"
+                className="application-card"
               >
-                <input type="hidden" name="role" value={selected?.name ?? ""} />
 
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold">
-                      Discord username *
-                    </span>
-                    <input
-                      className="field"
-                      name="discord"
-                      required
-                      placeholder="username"
-                    />
-                  </label>
+                {/* SELECTED ROLE */}
 
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold">
-                      Age *
-                    </span>
-                    <input
-                      className="field"
-                      name="age"
-                      required
-                      type="number"
-                      min="13"
-                      max="100"
-                      placeholder="16"
-                    />
-                  </label>
+                <div className="selected-role">
 
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold">
-                      Email *
-                    </span>
-                    <input
-                      className="field"
-                      name="email"
-                      required
-                      type="email"
-                      placeholder="you@example.com"
-                    />
-                  </label>
+                  <div>
 
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold">
-                      Years of experience *
+                    <span>
+                      APPLYING FOR
                     </span>
-                    <input
-                      className="field"
-                      name="experience"
-                      required
-                      placeholder="e.g. 2 years"
-                    />
-                  </label>
+
+                    <strong>
+                      {selected
+                        ? selected.name
+                        : "No role selected"}
+                    </strong>
+
+                  </div>
+
+                  {selected && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedRole("");
+                        setError("");
+                      }}
+                    >
+                      Change
+                    </button>
+                  )}
+
                 </div>
 
-                <div className="mt-5">
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold">
-                      Portfolio / past work
+                <input
+                  type="hidden"
+                  name="role"
+                  value={selected?.name ?? ""}
+                />
+
+                {/* PERSONAL */}
+
+                <div className="form-section">
+
+                  <div className="form-section-title">
+                    <span>01</span>
+
+                    <div>
+                      <h3>
+                        Personal information
+                      </h3>
+
+                      <p>
+                        Basic information so we know
+                        who&apos;s behind the application.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="form-grid">
+
+                    <label className="modern-field">
+
+                      <span>
+                        Discord username
+                        <b>*</b>
+                      </span>
+
+                      <input
+                        name="discord"
+                        required
+                        placeholder="yourusername"
+                      />
+
+                    </label>
+
+                    <label className="modern-field">
+
+                      <span>
+                        Age
+                        <b>*</b>
+                      </span>
+
+                      <input
+                        name="age"
+                        required
+                        type="number"
+                        min="13"
+                        max="100"
+                        placeholder="16"
+                      />
+
+                    </label>
+
+                    <label className="modern-field">
+
+                      <span>
+                        Email address
+                        <b>*</b>
+                      </span>
+
+                      <input
+                        name="email"
+                        required
+                        type="email"
+                        placeholder="you@example.com"
+                      />
+
+                    </label>
+
+                    <label className="modern-field">
+
+                      <span>
+                        Years of experience
+                        <b>*</b>
+                      </span>
+
+                      <input
+                        name="experience"
+                        required
+                        placeholder="e.g. 2 years"
+                      />
+
+                    </label>
+
+                  </div>
+
+                </div>
+
+                {/* EXPERIENCE */}
+
+                <div className="form-section">
+
+                  <div className="form-section-title">
+
+                    <span>02</span>
+
+                    <div>
+                      <h3>
+                        Your experience
+                      </h3>
+
+                      <p>
+                        Show us what you&apos;ve worked on
+                        before.
+                      </p>
+                    </div>
+
+                  </div>
+
+                  <label className="modern-field">
+
+                    <span>
+                      Portfolio & previous work
                     </span>
+
                     <textarea
-                      className="field min-h-28 resize-y"
                       name="portfolioLinks"
-                      placeholder="Paste links to your previous work, portfolio, Roblox games, etc."
+                      placeholder={
+                        "Paste links to your portfolio, Roblox games, previous projects, ArtStation, YouTube, etc."
+                      }
                     />
-                  </label>
-                </div>
 
-                <div className="mt-5">
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold">
-                      Upload work samples
-                    </span>
+                  </label>
+
+                  <label className="upload-area">
+
                     <input
-                      className="field cursor-pointer file:mr-3 file:rounded-lg file:border-0 file:bg-white file:px-3 file:py-2 file:font-semibold file:text-black"
                       name="portfolio"
                       type="file"
                       multiple
                       accept="image/png,image/jpeg,image/webp"
                       onChange={(event) =>
-                        setFiles(Array.from(event.target.files ?? []))
+                        setFiles(
+                          Array.from(
+                            event.target.files ?? []
+                          )
+                        )
                       }
                     />
-                    <p className="mt-2 text-xs text-zinc-600">
-                      PNG, JPG or WEBP. Up to 5 images, 7 MB each.
-                    </p>
+
+                    <div className="upload-icon">
+                      +
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        Drop your work here
+                      </strong>
+
+                      <p>
+                        or click to browse your files
+                      </p>
+
+                    </div>
+
+                    <span className="upload-limit">
+                      {files.length > 0
+                        ? `${files.length} file${
+                            files.length === 1
+                              ? ""
+                              : "s"
+                          } selected`
+                        : "PNG / JPG / WEBP"}
+                    </span>
+
                   </label>
+
+                  <p className="upload-note">
+                    Up to 5 images · 7 MB per image
+                  </p>
+
                 </div>
 
-                <div className="mt-5">
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold">
-                      Why should we choose you? *
+                {/* ABOUT */}
+
+                <div className="form-section">
+
+                  <div className="form-section-title">
+
+                    <span>03</span>
+
+                    <div>
+                      <h3>
+                        About you
+                      </h3>
+
+                      <p>
+                        This is where you sell yourself.
+                      </p>
+                    </div>
+
+                  </div>
+
+                  <label className="modern-field">
+
+                    <span>
+                      Why should we choose you?
+                      <b>*</b>
                     </span>
+
                     <textarea
-                      className="field min-h-36 resize-y"
                       name="why"
                       required
-                      placeholder="Tell us about yourself, what you can bring to PSTD, and why you want to join."
+                      className="large-textarea"
+                      placeholder="Tell us about yourself, your strengths, what you can bring to PSTD, and why you want to join Delayed Studios™."
                     />
-                  </label>
-                </div>
 
-                <div className="mt-5">
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold">
+                  </label>
+
+                  <label className="modern-field">
+
+                    <span>
                       Anything else?
                     </span>
+
                     <textarea
-                      className="field min-h-28 resize-y"
                       name="anything"
-                      placeholder="Availability, additional information, or anything else you want us to know."
+                      placeholder="Availability, additional skills, previous team experience, or anything else you'd like us to know."
                     />
+
                   </label>
+
                 </div>
+
+                {/* ERROR */}
 
                 {error && (
-                  <div className="mt-5 rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">
-                    {error}
+
+                  <div className="error-box">
+                    <span>!</span>
+
+                    <p>
+                      {error}
+                    </p>
                   </div>
+
                 )}
 
-                <div className="mt-8 flex flex-col gap-4 border-t border-white/[0.07] pt-6 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs leading-5 text-zinc-600">
-                    By submitting, you confirm that the information provided
-                    is accurate.
-                  </p>
+                {/* SUBMIT */}
+
+                <div className="submit-area">
+
+                  <div className="submit-info">
+
+                    <div className="secure-mark">
+                      ✓
+                    </div>
+
+                    <p>
+                      Your application will be reviewed
+                      privately by the PSTD team.
+                    </p>
+
+                  </div>
+
                   <button
-                    disabled={loading || !selectedRole}
-                    className="rounded-xl bg-white px-6 py-3 font-bold text-black transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
+                    type="submit"
+                    disabled={
+                      loading ||
+                      !selectedRole
+                    }
+                    className="submit-button"
                   >
-                    {loading ? "Submitting..." : "Submit application"}
+
+                    <span>
+                      {loading
+                        ? "SENDING APPLICATION..."
+                        : "SUBMIT APPLICATION"}
+                    </span>
+
+                    {!loading && (
+                      <span className="submit-arrow">
+                        →
+                      </span>
+                    )}
+
                   </button>
+
                 </div>
+
               </form>
+
             </section>
+
           </>
+
         )}
 
-        <footer className="border-t border-white/[0.06] py-8 text-center text-xs text-zinc-600">
-          PSTD Development Team
+        {/* FOOTER */}
+
+        <footer className="site-footer">
+
+          <div>
+
+            <div className="footer-brand">
+              DELAYED STUDIOS
+              <sup>TM</sup>
+            </div>
+
+            <p>
+              Building games worth remembering.
+            </p>
+
+          </div>
+
+          <div className="footer-right">
+            PSTD Developer Applications
+          </div>
+
         </footer>
+
       </div>
     </main>
   );
