@@ -22,6 +22,14 @@ const roles: Role[] = [
     urgent: true
   },
   {
+    id: "map-builder",
+    name: "Map Builder",
+    description:
+      "Build detailed, immersive and gameplay-focused maps, environments and locations for PSTD.",
+    category: "BUILDING",
+    icon: "MAP"
+  },
+  {
     id: "modeler",
     name: "3D Modeler",
     description:
@@ -150,10 +158,11 @@ export default function Applications() {
   return (
     <main className="min-h-screen overflow-hidden">
 
-      {/* BACKGROUND EFFECTS */}
+      {/* BACKGROUND */}
 
       <div className="site-background">
         <div className="background-grid" />
+
         <div className="glow glow-one" />
         <div className="glow glow-two" />
         <div className="glow glow-three" />
@@ -161,7 +170,7 @@ export default function Applications() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
 
-        {/* NAVBAR */}
+        {/* HEADER */}
 
         <header className="flex items-center justify-between border-b border-white/[0.06] py-6">
 
@@ -172,7 +181,9 @@ export default function Applications() {
             </div>
 
             <div>
+
               <div className="flex items-start">
+
                 <span className="studio-name">
                   DELAYED STUDIOS
                 </span>
@@ -180,11 +191,13 @@ export default function Applications() {
                 <sup className="ml-1 text-[9px] font-bold text-zinc-500">
                   TM
                 </sup>
+
               </div>
 
               <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.22em] text-zinc-600">
                 Independent Game Studio
               </p>
+
             </div>
 
           </div>
@@ -203,7 +216,9 @@ export default function Applications() {
 
         {submitted ? (
 
-          /* SUCCESS */
+          /* =====================================
+             SUCCESS SCREEN
+          ===================================== */
 
           <section className="success-wrapper">
 
@@ -233,7 +248,11 @@ export default function Applications() {
                 className="primary-button"
               >
                 Submit another application
-                <span>→</span>
+
+                <span>
+                  →
+                </span>
+
               </button>
 
             </div>
@@ -244,14 +263,20 @@ export default function Applications() {
 
           <>
 
-            {/* HERO */}
+            {/* =====================================
+               HERO
+            ===================================== */}
 
             <section className="hero">
 
               <div className="hero-eyebrow">
+
                 <span className="eyebrow-line" />
+
                 DELAYED STUDIOS™
+
                 <span className="eyebrow-line" />
+
               </div>
 
               <div className="hero-title-small">
@@ -259,6 +284,7 @@ export default function Applications() {
               </div>
 
               <h1 className="hero-title">
+
                 <span className="hero-title-light">
                   THE NEXT
                 </span>
@@ -266,6 +292,7 @@ export default function Applications() {
                 <span className="hero-title-gradient">
                   DEVELOPER.
                 </span>
+
               </h1>
 
               <p className="hero-description">
@@ -277,29 +304,52 @@ export default function Applications() {
               <div className="hero-meta">
 
                 <div className="meta-item">
-                  <strong>06</strong>
-                  <span>OPEN ROLES</span>
+
+                  <strong>
+                    07
+                  </strong>
+
+                  <span>
+                    OPEN ROLES
+                  </span>
+
                 </div>
 
                 <div className="meta-divider" />
 
                 <div className="meta-item">
-                  <strong>01</strong>
-                  <span>PROJECT</span>
+
+                  <strong>
+                    01
+                  </strong>
+
+                  <span>
+                    PROJECT
+                  </span>
+
                 </div>
 
                 <div className="meta-divider" />
 
                 <div className="meta-item">
-                  <strong>∞</strong>
-                  <span>ROOM TO GROW</span>
+
+                  <strong>
+                    ∞
+                  </strong>
+
+                  <span>
+                    ROOM TO GROW
+                  </span>
+
                 </div>
 
               </div>
 
             </section>
 
-            {/* PROJECT BANNER */}
+            {/* =====================================
+               PROJECT BANNER
+            ===================================== */}
 
             <section className="project-banner">
 
@@ -310,6 +360,7 @@ export default function Applications() {
                 </div>
 
                 <div>
+
                   <div className="project-overline">
                     JOIN THE DEVELOPMENT TEAM
                   </div>
@@ -317,11 +368,13 @@ export default function Applications() {
                   <h2>
                     PROJECT <span>PSTD</span>
                   </h2>
+
                 </div>
 
               </div>
 
               <div className="project-right">
+
                 <span>
                   Made by Delayed Studios™
                 </span>
@@ -329,17 +382,21 @@ export default function Applications() {
                 <span className="project-arrow">
                   ↗
                 </span>
+
               </div>
 
             </section>
 
-            {/* ROLES */}
+            {/* =====================================
+               ROLES
+            ===================================== */}
 
             <section className="roles-section">
 
               <div className="section-heading">
 
                 <div>
+
                   <div className="section-number">
                     01 — POSITIONS
                   </div>
@@ -352,12 +409,21 @@ export default function Applications() {
                     Choose the position that matches what
                     you&apos;re best at.
                   </p>
+
                 </div>
 
                 <div className="desktop-step">
-                  <span>01</span>
+
+                  <span>
+                    01
+                  </span>
+
                   <div />
-                  <span className="muted">02</span>
+
+                  <span className="muted">
+                    02
+                  </span>
+
                 </div>
 
               </div>
@@ -382,16 +448,21 @@ export default function Applications() {
                   >
 
                     {role.urgent && (
+
                       <div className="needed-badge">
+
                         <span />
+
                         MOST NEEDED
+
                       </div>
+
                     )}
 
                     <div className="role-top">
 
                       <span className="role-index">
-                        0{index + 1}
+                        {String(index + 1).padStart(2, "0")}
                       </span>
 
                       <span className="role-category">
@@ -432,7 +503,9 @@ export default function Applications() {
 
             </section>
 
-            {/* APPLICATION */}
+            {/* =====================================
+               APPLICATION FORM
+            ===================================== */}
 
             <section
               id="application-form"
@@ -458,6 +531,7 @@ export default function Applications() {
                 </div>
 
                 <div className="desktop-step">
+
                   <span className="muted">
                     01
                   </span>
@@ -467,6 +541,7 @@ export default function Applications() {
                   <span>
                     02
                   </span>
+
                 </div>
 
               </div>
@@ -495,6 +570,7 @@ export default function Applications() {
                   </div>
 
                   {selected && (
+
                     <button
                       type="button"
                       onClick={() => {
@@ -504,6 +580,7 @@ export default function Applications() {
                     >
                       Change
                     </button>
+
                   )}
 
                 </div>
@@ -514,14 +591,18 @@ export default function Applications() {
                   value={selected?.name ?? ""}
                 />
 
-                {/* PERSONAL */}
+                {/* PERSONAL INFORMATION */}
 
                 <div className="form-section">
 
                   <div className="form-section-title">
-                    <span>01</span>
+
+                    <span>
+                      01
+                    </span>
 
                     <div>
+
                       <h3>
                         Personal information
                       </h3>
@@ -530,7 +611,9 @@ export default function Applications() {
                         Basic information so we know
                         who&apos;s behind the application.
                       </p>
+
                     </div>
+
                   </div>
 
                   <div className="form-grid">
@@ -609,9 +692,12 @@ export default function Applications() {
 
                   <div className="form-section-title">
 
-                    <span>02</span>
+                    <span>
+                      02
+                    </span>
 
                     <div>
+
                       <h3>
                         Your experience
                       </h3>
@@ -620,6 +706,7 @@ export default function Applications() {
                         Show us what you&apos;ve worked on
                         before.
                       </p>
+
                     </div>
 
                   </div>
@@ -632,9 +719,7 @@ export default function Applications() {
 
                     <textarea
                       name="portfolioLinks"
-                      placeholder={
-                        "Paste links to your portfolio, Roblox games, previous projects, ArtStation, YouTube, etc."
-                      }
+                      placeholder="Paste links to your portfolio, Roblox games, previous projects, ArtStation, YouTube, etc."
                     />
 
                   </label>
@@ -672,6 +757,7 @@ export default function Applications() {
                     </div>
 
                     <span className="upload-limit">
+
                       {files.length > 0
                         ? `${files.length} file${
                             files.length === 1
@@ -679,6 +765,7 @@ export default function Applications() {
                               : "s"
                           } selected`
                         : "PNG / JPG / WEBP"}
+
                     </span>
 
                   </label>
@@ -695,9 +782,12 @@ export default function Applications() {
 
                   <div className="form-section-title">
 
-                    <span>03</span>
+                    <span>
+                      03
+                    </span>
 
                     <div>
+
                       <h3>
                         About you
                       </h3>
@@ -705,6 +795,7 @@ export default function Applications() {
                       <p>
                         This is where you sell yourself.
                       </p>
+
                     </div>
 
                   </div>
@@ -745,11 +836,15 @@ export default function Applications() {
                 {error && (
 
                   <div className="error-box">
-                    <span>!</span>
+
+                    <span>
+                      !
+                    </span>
 
                     <p>
                       {error}
                     </p>
+
                   </div>
 
                 )}
@@ -787,9 +882,11 @@ export default function Applications() {
                     </span>
 
                     {!loading && (
+
                       <span className="submit-arrow">
                         →
                       </span>
+
                     )}
 
                   </button>
@@ -804,15 +901,22 @@ export default function Applications() {
 
         )}
 
-        {/* FOOTER */}
+        {/* =====================================
+           FOOTER
+        ===================================== */}
 
         <footer className="site-footer">
 
           <div>
 
             <div className="footer-brand">
+
               DELAYED STUDIOS
-              <sup>TM</sup>
+
+              <sup>
+                TM
+              </sup>
+
             </div>
 
             <p>
@@ -828,6 +932,7 @@ export default function Applications() {
         </footer>
 
       </div>
+
     </main>
   );
-}
+                }
